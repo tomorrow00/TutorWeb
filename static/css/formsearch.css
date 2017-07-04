@@ -1,0 +1,203 @@
+@import url(http://fonts.googleapis.com/css?family=Montserrat);
+
+* {
+	margin: 0; 
+	padding: 0;
+}
+
+a {
+	outline:none;
+}
+
+.nav {
+	background: #232323;
+	height: 60px;
+	display: inline-block;
+}
+
+.nav li {
+	float: left;
+	list-style-type: none;
+	position: relative;
+}
+
+.nav li a {
+	font-size: 16px; 
+	color: white;
+	display: block;
+	line-height: 60px;
+	padding: 0 26px;
+	text-decoration: none;
+	border-left: 1px solid #2e2e2e;
+	font-family: Montserrat, sans-serif;
+	text-shadow: 0 0 1px rgba(255, 255, 255, 0.5);
+}
+.nav li a:hover {
+	background-color: #2e2e2e;
+}
+.nav select {
+	outline:none;
+	border-top-style:none;
+	border-bottom-style:none;
+	border-right-style:none;
+	border-left-style:none;
+	background-color:transparent;
+	font-size:16px;
+	color:white;
+	font-family: Montserrat, sans-serif;
+	text-align: center;
+	width:140px;
+	height:60px;
+	cursor: pointer;
+	appearance:none;
+	-moz-appearance:none;
+	-webkit-appearance:none;
+}
+
+select::-ms-expand{ display: none; }
+
+.nav select option {
+	font-family: Montserrat, sans-serif;
+	width:120px;
+	height: 200px;
+	background-color: #2e2e2e;
+}
+
+#settings a {
+	padding: 18px;
+	height: 24px;
+	font-size: 10px;
+	line-height: 24px;
+}
+
+.search {
+	margin-top: -50px;
+}
+#search {
+	width: 357px;
+	margin: 4px;
+}
+#search_text{
+	width: 297px;
+	padding: 15px 0 15px 20px;
+	font-size: 16px;
+	font-family: Montserrat, sans-serif;
+	border: 0 none;
+	height: 52px;
+	margin-right: 0;
+	color: white;
+	outline: none;
+	background: #1f7f5c;
+	float: left;
+	box-sizing: border-box;
+	transition: all 0.15s;
+}
+::-webkit-input-placeholder { /* WebKit browsers */
+	color: white;
+}
+:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+	color: white;
+}
+::-moz-placeholder { /* Mozilla Firefox 19+ */
+	color: white;
+}
+:-ms-input-placeholder { /* Internet Explorer 10+ */
+	color: white;
+}
+#search_text:focus {
+	background: rgb(64, 151, 119);
+}
+#search_button {
+	outline: none;
+	border: 0 none;
+	background: #1f7f5c url(/static/images/search.png) center no-repeat;
+	width: 60px; 
+	float: left;
+	padding: 0;
+	text-align: center;
+	height: 52px;
+	cursor: pointer;
+}
+
+#options a{
+	position: relative;
+	width: 100px;
+}
+#options>a {
+	background-image: url(/static/images/triangle.png);
+	background-position: 85% center;
+	background-repeat: no-repeat;
+	padding-right: 42px;
+}
+.subnav {
+	visibility: hidden;
+	position: absolute;
+	top: 110%;
+	right: 0;
+	width: 155px;
+	height: auto;
+	opacity: 0;
+	transition: all 0.1s;
+	background: #232323;
+}
+.subnav li {
+	float: right;
+	height: 30px;
+}
+.subnav li a {
+	border-bottom: 1px solid #2e2e2e;
+	line-height: 30px;
+}
+#options:hover .subnav{
+	visibility: visible;
+	top: 100%;
+	opacity: 1;
+}
+
+#options:hover select {
+	visibility: visible;
+	top: 100%;
+	opacity: 1;
+}
+
+.table table{
+	border:2px solid #000000;
+	height:100px;
+	margin: 100px auto;
+}
+.table table th, td{
+	border:1px solid #000000;
+	width:100px;
+	height:0px;
+	text-align:center;
+}
+
+.scroll {
+	overflow: hidden;
+	position: relative;
+	margin: 20px auto;
+}
+.scroll li {
+	padding: 10px;
+}
+.scroll table{
+	border:2px solid #000000;
+	height:100px;
+	margin: auto;
+}
+.scroll table th, td{
+	border:1px solid #000000;
+	width:100px;
+	height:0px;
+	text-align:center;
+}
+#major a{
+	position: relative;
+	width: 100px;
+}
+#omajor>a {
+	background-image: url(/static/images/triangle.png);
+	background-position: 85% center;
+	background-repeat: no-repeat;
+	padding-right: 42px;
+}
