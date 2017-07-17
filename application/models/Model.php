@@ -1,15 +1,15 @@
 <?php
 class Model extends CI_Model{
 	//构造函数
-	public function _construct()
+	public function __construct()
 	{
-		parent::_construct();
+		parent::__construct();
+		$this->load->database();
 	}
 	
 	//搜索数据库
 	public function search_db($sql)
 	{
-		$this->load->database();
 		$result = $this->db->query($sql);
 		
 		if($result->num_rows() > 0){
@@ -20,29 +20,9 @@ class Model extends CI_Model{
 		}
 	}
 	
-	//搜索一级或二级学科
-//	public function search_db($sql)
-//	{
-//		$this->load->database();
-//		$result = $this->db->query($sql);
-//		
-//		if($result->num_rows() > 0){
-//			return $result->result();
-//		}
-//		else{
-//			return null;
-//		}
-//	}
-	
-	//增加搜索次数
-	public function addsearchtimes($add) {
-		$this->load->database();
-		$this->db->query($add);
-	}
-	
-	//
-	public function search_num($sql) {
-		$this->load->database();
+	//搜索条数
+	public function search_num($sql)
+	{
 		$result = $this->db->query($sql);
 		
 		if($result->num_rows()){
@@ -51,5 +31,11 @@ class Model extends CI_Model{
 		else{
 			return null;
 		}
+	}
+	
+	//增加搜索次数
+	public function execute_db($sql)
+	{
+		$this->db->query($sql);
 	}
 }?>

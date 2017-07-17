@@ -11,48 +11,14 @@
 			$("#regular_search").click(function () {
 				var txt = $("#search_text").val();
 				var selected = $('#show').text();
-				var sv = '*';
 				
-				/*switch(selected) {
-					case '搜索全部':
-						var sv = '*';
-						break;
-					case '姓名':
-						var sv = 'Teacher_Name';
-						break;
-					case '性别':
-						var sv = 'Teacher_Sex';
-						break;
-					case '单位':
-						var sv = 'Teacher_Unit';
-						break;
-					case '职称':
-						var sv = 'Teacher_ProTitle';
-						break;
-					case '职务':
-						var sv = 'Teacher_Duty';
-						break;
-					case '专业':
-						var sv = 'Teacher_Major';
-						break;
-					case '方向':
-						var sv = 'Teacher_Dir';
-						break;
-					case '头衔':
-						var sv = 'Teacher_Title';
-						break;
-					case '个人简介':
-						var sv = 'Teacher_Resume';
-						break;
-					case '个人主页链接':
-						var sv = 'Teacher_HomePage';
-						break;
-					case '联系方式':
-						var sv = 'Teacher_Tel';
-						break;
-				}*/
-				
-				document.location = "<?php echo $base_url;?>teacher/regular_search?txt=" + txt + "&sv=" + sv + "&page=" + 1;
+				document.location = "<?php echo $base_url; ?>/teacher/regular_search?txt=" + txt + "&page=" + 1;
+			})
+			
+			$("#logout").click(function () {
+				$.ajax({
+					url:"<?php echo $base_url;?>/login/logout"
+				});
 			})
 		})
 		</script>
@@ -63,10 +29,25 @@
 				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 					<ul class="nav navbar-nav navbar-right">
 						<li>
-							<a href="<?php echo $base_url;?>/register">注册</a>
-						</li>
-						<li>
-							<a href="<?php echo $base_url;?>/login">登录</a>
+						<?php
+							if (isset($_SESSION['usr'])) {
+								$usr = $_SESSION['usr'];
+						?>
+								<a id="username" href=""><?php echo $usr; ?></a>
+							</li>
+							<li>
+								<a id="logout" href="">注销</a>
+						<?php
+							}
+							else {
+						?>
+								<a href="<?php echo $base_url; ?>\register" id="register">注册</a>
+							</li>
+							<li>
+								<a href="<?php echo $base_url; ?>\login" id="login">登录</a>
+						<?php
+							}
+						?>
 						</li>
 					</ul>
 				</div>
@@ -119,7 +100,7 @@
 							<h4>教师热搜</h4>
 						</li>
 						
-						<?php foreach ($teacherScroll as $item): ?>
+						<?php foreach ($teacherSearch as $item): ?>
 						<li>
 							<?php
 								if(isset($item->Teacher_HomePage)) {
@@ -140,7 +121,7 @@
 							<h4>专业热搜</h4>
 						</li>
 						
-						<?php foreach ($teacherScroll as $item): ?>
+						<?php foreach ($majorSearch as $item): ?>
 						<li>
 							<?php echo $item->Major_Name; ?>
 						</li>

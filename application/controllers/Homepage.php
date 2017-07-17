@@ -2,21 +2,23 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Homepage extends CI_Controller {
-	public $base_url;
 	//构造函数
-	public function _construct()
+	public function __construct()
 	{
-		parent::_construct();
-		$this->base_url = $this->config->item('base_url');
+		parent::__construct();
+		$this->base_url = $this->config->item('site_url');
+		session_start();
+		$this->load->model('Model');
 	}
 	
 	public function index()
 	{
-		$this->load->model('Model');
-		$sql = "SELECT * FROM Teacher as a left join Major as b on a.Teacher_Major=b.Major_Code ORDER BY SearchTimes DESC LIMIT 5";
-    	$teacherScroll = $this->Model->search_db($sql);
-    	
-    	$this->load->view('homepage', array('base_url' => $this->base_url, 'teacherScroll' => $teacherScroll));
+		$sql_teacher = "SELECT * FROM Teacher ORDER BY SearchTimes DESC LIMIT 5";
+		$sql_major = "SELECT * FROM Major ORDER BY SearchTimes DESC LIMIT 5";
+		$teacherSearch = $this->Model->search_db($sql_teacher);
+		$majorSearch = $this->Model->search_db($sql_major);
+		
+		$this->load->view('homepage', array('base_url' => $this->base_url, 'teacherSearch' => $teacherSearch, 'majorSearch' => $majorSearch));
 	}
 }
 ?>

@@ -42,14 +42,17 @@
 			}
 			
 			$.ajax({
-				url:"<?php echo $base_url;?>/login/check",
+				url:"<?php echo $base_url;?>/login/check_login",
 				type:"POST",
 				dataType:'json',
 				data:{"usr":username, "pwd":password, "type":usertype},
 				success:function (data) {
 					if (data.flag == 0) {
-						window.location.href="<?php echo $base_url;?>/";
-						return true;
+						location.href = "<?php echo $base_url; ?>/";
+//						return true;
+//						document.location = "<?php echo $base_url; ?>"
+//						alert(data.session_url);
+//						location.href = data.session_url;
 					}
 					else {
 						if (data.flag == 1) {
@@ -68,54 +71,6 @@
 			return false;
 		})
 	})
-	
-	/*function checklogin() {
-		if($("#username").val() == ""){
-			//alert("用户名不能为空！");
-			$('#msg').html("用户名不能为空！");
-			$("#username").focus();
-			return false;
-		}
-		else {
-			$('#msg').html("");
-		}
-			
-		if($("#password").val() == ""){
-			//alert("密码不能为空！");
-			$('#msg').html("密码不能为空！");
-			$("#password").focus();
-			return false;
-		}
-		else {
-			$('#msg').html("");
-		}
-			
-		var username = $("#username").val();
-		var password = $("#password").val();
-			
-		$('.text').attr('disabled', true);
-		$('.password').attr('disabled', true);
-		$('.loading').show();
-			
-		$.ajax({
-			url:"http://127.0.0.1/index.php/login/check",
-			type:"POST",
-			data:{"usr":username, "pwd":password},
-			success:function (data) {
-				if (data == "1") {
-					//alert("log in successfully");
-					$('#msg').html("success");
-					return true;
-				}
-				else {
-					//alert("log in failed");
-					$('#msg').html("fail");
-					return false;
-				}
-				//alert(data);
-			}
-		});
-	}*/
 	</script>
 </head>
 <body>
@@ -123,6 +78,7 @@
 	<section id="content">
 		<form action="">
 			<h1>登录</h1>
+			<span id="msg" style="color:red"></span>
 			<div>
 				<input type="text" placeholder="用户名" id="username" autocomplete="off" />
 			</div>
@@ -139,7 +95,6 @@
 				<a href="<?php echo $base_url;?>/register">注册</a>
 			</div>
 		</form>
-		<span id="msg"></span>
 	</section>
 </div>
 <div id="register"></div>

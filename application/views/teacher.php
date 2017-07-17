@@ -63,7 +63,7 @@
 				var selected = $('#show').text();
 				var sv = '*';
 				
-				document.location = "<?php echo $base_url;?>regular_search?txt=" + txt + "&sv=" + sv + "&page=1";
+				document.location = "<?php echo $base_url;?>/teacher/regular_search?txt=" + txt + "&sv=" + sv + "&page=1";
 			})
 			
 			$("#advanced_search").click(function () {
@@ -169,7 +169,13 @@
 					sql = "SELECT * FROM Teacher as a left join Major as b on a.Teacher_Major=b.Major_Code";
 				}
 				
-				document.location = "<?php echo $base_url;?>advanced_search?sql=" + sql + "&page=1";
+				document.location = "<?php echo $base_url;?>/teacher/advanced_search?sql=" + sql + "&page=1";
+			})
+			
+			$("#logout").click(function () {
+				$.ajax({
+					url:"<?php echo $base_url;?>/login/logout"
+				});
 			})
 		})
 		
@@ -333,10 +339,25 @@
 							
 							<ul class="nav navbar-nav navbar-right">
 								<li>
-									<a href="<?php echo $base_url;?>/register">注册</a>
-								</li>
-								<li>
-									<a href="<?php echo $base_url;?>/login">登录</a>
+								<?php
+									if (isset($_SESSION['usr'])) {
+										$usr = $_SESSION['usr'];
+								?>
+										<a id="username" href=""><?php echo $usr; ?></a>
+									</li>
+									<li>
+										<a id="logout" href="">注销</a>
+								<?php
+									}
+									else {
+								?>
+										<a href="<?php echo $base_url;?>/register">注册</a>
+									</li>
+									<li>
+										<a href="<?php echo $base_url;?>/login">登录</a>
+								<?php
+									}
+								?>
 								</li>
 							</ul>
 						</div>
@@ -392,19 +413,19 @@
 							
 								<?php 
 									$i = 0;
-									foreach ($teacherList as $item): 
+									foreach ($teacherList as $item):
 								?>
 								<tr>
 									<td>
 										<?php
-										if(isset($item->Teacher_HomePage)) {
+										if(isset($item->Teacher_Photo)) {
 										?>
-											<img id='teacherImg' src='<?php echo $base_url; ?>/static/images/logo.jpg' alt='图片加载失败'>
+											<img id='teacherImg' src='<?php echo $base_url; ?>/static/images/TeacherPhoto/<?php echo $item->Teacher_Photo; ?>' alt='图片加载失败' onerror="this.src='<?php echo $base_url; ?>/static/images/logo.jpg'" />
 										<?php
 										}
 										else {
 										?>
-											<img id='teacherImg' src='<?php echo $base_url; ?>/static/images/logo1.jpg' alt='图片加载失败'>
+											<img id='teacherImg' src='<?php echo $base_url; ?>/static/images/logo.jpg' alt='图片加载失败'>
 										<?php } ?>
 									
 										<style type="text/css">
@@ -482,7 +503,7 @@
 											if(isset($item->Teacher_HomePage)) {
 											?>
 												<li style='color:#737373'>主&nbsp;&nbsp;&nbsp;页：</li>
-												<li><a href=<?php echo $item->Teacher_HomePage; ?>>个人主页</a></li>
+												<li><a href=<?php echo $item->Teacher_HomePage; ?> target="_blank">个人主页</a></li>
 											<?php } ?>
 										</ul>
 										

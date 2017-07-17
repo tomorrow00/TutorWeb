@@ -13,7 +13,6 @@
 				dataType:'json',
 				data:{"code":0},
 				success:function (data) {
-					//$('#major1').append("<option value='*'>不限</option>");
 					for (var i = 0; i < data.majorList.length; i ++) {
 						$('#modal_major1').append("<option value='" + data.majorList[i].Major_Code + "'>" + data.majorList[i].Major_Name + "</option>");
 					}
@@ -62,13 +61,11 @@
 				var txt = $("#search_text").val();
 				var selected = $('#show').text();
 				var sv = '*';
-				document.location = "<?php echo $base_url;?>regular_search?txt=" + txt + "&sv=" + sv + "&page=1";
+				document.location = "<?php echo $base_url;?>/teacher/regular_search?txt=" + txt + "&sv=" + sv + "&page=1";
 			})
 			
 			$("#advanced_search").click(function () {
 				var name = "";
-				//var age1 = "";
-				//var age2 = "";
 				var sex = "";
 				var unit = "";				
 				var protitle = "";
@@ -170,7 +167,13 @@
 					sql = "SELECT * FROM Teacher";
 				}
 				
-				document.location = "<?php echo $base_url;?>advanced_search?sql=" + sql + "&page=1";
+				document.location = "<?php echo $base_url;?>/teacher/advanced_search?sql=" + sql + "&page=1";
+			})
+			
+			$("#logout").click(function () {
+				$.ajax({
+					url:"<?php echo $base_url;?>/login/logout"
+				});
 			})
 		})
 		
@@ -216,9 +219,7 @@
 									</style>
 									<ul class="dropdown-menu" role="menu">
 										<li><a href="#" id="searchall" onclick="replace_search('搜索全部')">搜索全部</a></li>
-										<!-- <li><a href="#" id="ID" onclick="replace_search('ID')">ID</a></li> -->
 										<li><a href="#" id="name" onclick="replace_search('姓名')">姓名</a></li>
-										<!-- <li><a href="#" id="age" onclick="replace_search('年龄')">年龄</a></li> -->
 										<li><a href="#" id="sex" onclick="replace_search('性别')">性别</a></li>
 										<li><a href="#" id="unit" onclick="replace_search('单位')">单位</a></li>
 										<li><a href="#" id="protitle" onclick="replace_search('职称')">职称</a></li>
@@ -313,10 +314,25 @@
 							
 							<ul class="nav navbar-nav navbar-right">
 								<li>
-									<a href="<?php echo $base_url;?>/register">注册</a>
-								</li>
-								<li>
-									<a href="<?php echo $base_url;?>/login">登录</a>
+								<?php
+									if (isset($_SESSION['usr'])) {
+										$usr = $_SESSION['usr'];
+								?>
+										<a id="username" href=""><?php echo $usr; ?></a>
+									</li>
+									<li>
+										<a id="logout" href="">注销</a>
+								<?php
+									}
+									else {
+								?>
+										<a href="<?php echo $base_url;?>/register">注册</a>
+									</li>
+									<li>
+										<a href="<?php echo $base_url;?>/login">登录</a>
+								<?php
+									}
+								?>
 								</li>
 							</ul>
 						</div>
