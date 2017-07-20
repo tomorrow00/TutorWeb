@@ -35,12 +35,11 @@ class Login extends CI_Controller {
     	
     	if($userList[0]) {
     		if($pwd == $userList[0]->User_Password) {
-				$_SESSION['usr'] = $usr;
-//				$_SESSION['url'] = $_SERVER['HTTP_REFERER'];
+				$_SESSION['usr'] = $userList[0]->User_Name;
+				$_SESSION['id'] = $userList[0]->User_ID;
 				
     			$json=array(
 					'session_usr' => $_SESSION['usr'],
-//					'session_url' => $_SESSION['url'],
 					'flag' => 0,
 					'data'=>$userList[0],
 					'msg' => '登录成功！'
@@ -66,7 +65,7 @@ class Login extends CI_Controller {
 	public function logout()
 	{
 		unset($_SESSION['usr']);
-		unset($_SESSION['url']);
+		unset($_SESSION['id']);
 	}
 	
 	//注册账户

@@ -22,11 +22,15 @@ class Teacher extends CI_Controller{
 	{
 		$txt = trim($_GET['txt']);
 		
-		if ($txt != "") {
-			$sql = "SELECT * FROM Teacher as a left join Major as b on a.Teacher_Major=b.Major_Code WHERE concat(ifnull(`Teacher_Name`,''),ifnull(`Teacher_Sex`,''),ifnull(`Teacher_Unit`,''),ifnull(`Teacher_ProTitle`,''),ifnull(`Teacher_Duty`,''),ifnull(`Major_Name`,''),ifnull(`Teacher_Dir`,''),ifnull(`Teacher_Title`,'')) LIKE N'%".$txt."%'";
+		if (isset($_SESSION['id'])) {
+			$sql = "SELECT * FROM (Teacher as a left join Major as b on a.Teacher_Major=b.Major_Code) left join Collection as c on a.Teacher_ID=c.C_Teacher_ID";
 		}
 		else {
 			$sql = "SELECT * FROM Teacher as a left join Major as b on a.Teacher_Major=b.Major_Code";
+		}
+		
+		if ($txt != "") {
+			$sql.=" WHERE concat(ifnull(`Teacher_Name`,''),ifnull(`Teacher_Sex`,''),ifnull(`Teacher_Unit`,''),ifnull(`Teacher_ProTitle`,''),ifnull(`Teacher_Duty`,''),ifnull(`Major_Name`,''),ifnull(`Teacher_Dir`,''),ifnull(`Teacher_Title`,'')) LIKE N'%".$txt."%'";
 		}
 		
 		$resultCount = $this->Model->search_num($sql);

@@ -74,8 +74,20 @@
 				var duty = "";
 				var direction = "";
 				var title = "";
-				var sql = "SELECT * FROM Teacher as a left join Major as b on a.Teacher_Major=b.Major_Code WHERE ";
 				var flag = 0;
+				
+				<?php
+				if (isset($_SESSION['id'])) {
+				?>
+					var sql = "SELECT * FROM (Teacher as a left join Major as b on a.Teacher_Major=b.Major_Code) left join Collection as c on a.Teacher_ID=c.C_Teacher_ID WHERE ";
+				<?php
+				}
+				else {
+				?>
+					var sql = "SELECT * FROM Teacher as a left join Major as b on a.Teacher_Major=b.Major_Code WHERE ";
+				<?php
+				}
+				?>
 				
 				if ($("#modal_name").val()) {
 					name = $("#modal_name").val();
@@ -166,7 +178,18 @@
 				}
 				
 				if (flag == 0) {
-					sql = "SELECT * FROM Teacher as a left join Major as b on a.Teacher_Major=b.Major_Code";
+					<?php
+					if (isset($_SESSION['id'])) {
+					?>
+						sql = "SELECT * FROM (Teacher as a left join Major as b on a.Teacher_Major=b.Major_Code) left join Collection as c on a.Teacher_ID=c.C_Teacher_ID";
+					<?php
+					}
+					else {
+					?>
+						sql = "SELECT * FROM Teacher as a left join Major as b on a.Teacher_Major=b.Major_Code";
+					<?php
+					}
+					?>
 				}
 				
 				document.location = "<?php echo $base_url;?>/teacher/advanced_search?sql=" + sql + "&page=1";
@@ -217,9 +240,52 @@
 			fold.style.display = 'none';
 			unfold.style.display = 'inline';
 		}
+		
+		function collect(id) {
+			var collectionImg = document.getElementById('collectionImg' + id);
+			var collection = document.getElementById('collection' + id);
+			collectionText = collection.getElementsByTagName("span")[0].innerHTML;
+			
+			<?php
+			if (isset($_SESSION['usr'])) {
+			?>
+				if (collectionText == "收藏") {
+					$.ajax({
+						url:"<?php echo $base_url;?>/user/collect",
+						type:"POST",
+						dataType:'json',
+						data:{"teacherID":id},
+						success:function (data) {
+							collectionImg.src = "<?php echo $base_url; ?>/static/images/f.png";
+							collection.getElementsByTagName("span")[0].innerHTML = "已收藏";
+						}
+					});
+				}
+				else {
+					$.ajax({
+						url:"<?php echo $base_url;?>/user/cancel_collect",
+						type:"POST",
+						dataType:'json',
+						data:{"teacherID":id},
+						success:function (data) {
+							collectionImg.src = "<?php echo $base_url; ?>/static/images/e.png";
+							collection.getElementsByTagName("span")[0].innerHTML = "收藏";
+						}
+					});
+				}
+			<?php
+			}
+			else {
+			?>
+				alert("请先登录！");
+			<?php
+			}
+			?>
+		}
 		</script>
-    </head>
-    <body>
+	</head>
+	
+	<body>
 		<div class="container-fluid">
 			<div class="row">
 				<div class="col-md-12">
@@ -330,7 +396,7 @@
 											<div class="modal-footer">
 												<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button> 
 												<button type="reset" class="btn btn-default" id="reset">重置</button>
-												<button type="button" class="btn btn-primary" id="advanced_search" data-dismiss="modal">提交</button>
+												<button type="button" class="btn btn-primary" id="advanced_search" data-dismiss="modal" style="background:#0000aa">提交</button>
 											</div>
 										</div>
 									</div>
@@ -343,7 +409,7 @@
 									if (isset($_SESSION['usr'])) {
 										$usr = $_SESSION['usr'];
 								?>
-										<a id="username" href=""><?php echo $usr; ?></a>
+										<a id="username" href="<?php echo $base_url; ?>/user"><?php echo $usr; ?></a>
 									</li>
 									<li>
 										<a id="logout" href="">注销</a>
@@ -368,10 +434,11 @@
 			
 			<div class="row">
 				<div class="col-md-2">
+					
 					<div class="span">
 						<ul class="nav nav-list">
 							<li class="nav-header">
-								列表标题
+								<h4>列表标题</h4>
 							</li>
 							<li class="active">
 								<a href="#">首页</a>
@@ -383,7 +450,7 @@
 								<a href="#">应用</a>
 							</li>
 							<li class="nav-header">
-								功能列表
+								<h4>功能列表</h4>
 							</li>
 							<li>
 								<a href="#">资料</a>
@@ -399,6 +466,7 @@
 						</ul>
 					</div>
 				</div>
+				
 				<div class="col-md-10">
 					<div class="span">
 						<div id="table">
@@ -416,28 +484,49 @@
 									foreach ($teacherList as $item):
 								?>
 								<tr>
-									<td>
-										<?php
-										if(isset($item->Teacher_Photo)) {
-										?>
-											<img id='teacherImg' src='<?php echo $base_url; ?>/static/images/TeacherPhoto/<?php echo $item->Teacher_Photo; ?>' alt='图片加载失败' onerror="this.src='<?php echo $base_url; ?>/static/images/logo.jpg'" />
-										<?php
-										}
-										else {
-										?>
-											<img id='teacherImg' src='<?php echo $base_url; ?>/static/images/logo.jpg' alt='图片加载失败'>
-										<?php } ?>
+									<td style="text-align:center">
+									<?php
+									if(isset($item->Teacher_Photo)) {
+									?>
+										<img id='teacherImg' src='<?php echo $base_url; ?>/static/images/TeacherPhoto/<?php echo $item->Teacher_Photo; ?>' alt='图片加载失败' onerror="this.src='<?php echo $base_url; ?>/static/images/logo.jpg'" />
+									<?php
+									}
+									else {
+									?>
+										<img id='teacherImg' src='<?php echo $base_url; ?>/static/images/logo.jpg' alt='图片加载失败'>
+									<?php } ?>
 									
 										<style type="text/css">
-										img {
+										#teacherImg {
 											width: 60%;
 											display: block;
 											margin: 0 auto;
 											margin-bottom: 30px;
 											margin-top: 20px;
 										}
+										
+										#collectionImg<?php echo $item->Teacher_ID; ?> 
+										{
+											width: 20px;
+											margin-right: 5px;
+											margin-bottom: 5px;
+											filter: alpha(opacity=50);
+											opacity: 0.9;
+										}
 										</style>
-									
+									<?php
+										if (isset($item->C_User_ID) && $item->Collected == 1) {
+									?>
+										<a id="collection<?php echo $item->Teacher_ID; ?>" href="javascript:void(0)" onclick="collect('<?php echo $item->Teacher_ID; ?>')"><img id="collectionImg<?php echo $item->Teacher_ID; ?>" src="<?php echo $base_url; ?>/static/images/f.png"><span>已收藏</span></a>
+									<?php
+										}
+										else {
+									?>
+										<a id="collection<?php echo $item->Teacher_ID; ?>" href="javascript:void(0)" onclick="collect('<?php echo $item->Teacher_ID; ?>')"><img id="collectionImg<?php echo $item->Teacher_ID; ?>" src="<?php echo $base_url; ?>/static/images/e.png"><span>收藏</span></a>
+									<?php
+										}
+									?>
+										
 									</td>
 									
 									<td style="width:80%">
@@ -549,7 +638,7 @@
 									</li>
 									<li>
 										<?php
-										$url = 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'].'?'.$_SERVER['QUERY_STRING'];
+										$url = 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
 									
 										$url_arr = parse_url($url);
 										parse_str($url_arr['query'], $arr);
@@ -655,11 +744,12 @@
 									</li>
 								</ul>
 							</div>
+						</div>
 					</div>
 				</div>
 			</div>
 			
-			<div class="row" id="footer">
+			<div class="row">
 				<div class="col-md-2">
 					<address>
 						 <strong>Twitter, Inc.</strong><br> 795 Folsom Ave, Suite 600<br> San Francisco, CA 94107<br> <abbr title="Phone">P:</abbr> (123) 456-7890

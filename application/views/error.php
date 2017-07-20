@@ -1,7 +1,7 @@
 <html>
 	<head>
     	<meta http-equiv="content-type" content="text/html; charset=utf-8">
-    	<title>导师信息</title>
+    	<title>出错啦</title>
 		<script src="<?php echo $base_url; ?>/static/js/jquery-3.1.1.min.js"></script>
 		<link rel="stylesheet" href="<?php echo $base_url; ?>/static/css/bootstrap.min.css" type="text/css" />
 		<script src="<?php echo $base_url; ?>/static/js/bootstrap.min.js"></script>
@@ -72,8 +72,20 @@
 				var duty = "";
 				var direction = "";
 				var title = "";
-				var sql = "SELECT * FROM Teacher as a left join Major as b on a.Teacher_Major=b.Major_Name WHERE ";
 				var flag = 0;
+				
+				<?php
+				if (isset($_SESSION['id'])) {
+				?>
+					var sql = "SELECT * FROM (Teacher as a left join Major as b on a.Teacher_Major=b.Major_Code) left join Collection as c on a.Teacher_ID=c.C_Teacher_ID WHERE ";
+				<?php
+				}
+				else {
+				?>
+					var sql = "SELECT * FROM Teacher as a left join Major as b on a.Teacher_Major=b.Major_Code WHERE ";
+				<?php
+				}
+				?>
 				
 				if ($("#modal_name").val()) {
 					name = $("#modal_name").val();
@@ -164,7 +176,18 @@
 				}
 				
 				if (flag == 0) {
-					sql = "SELECT * FROM Teacher";
+					<?php
+					if (isset($_SESSION['id'])) {
+					?>
+						sql = "SELECT * FROM (Teacher as a left join Major as b on a.Teacher_Major=b.Major_Code) left join Collection as c on a.Teacher_ID=c.C_Teacher_ID";
+					<?php
+					}
+					else {
+					?>
+						sql = "SELECT * FROM Teacher as a left join Major as b on a.Teacher_Major=b.Major_Code";
+					<?php
+					}
+					?>
 				}
 				
 				document.location = "<?php echo $base_url;?>/teacher/advanced_search?sql=" + sql + "&page=1";
@@ -305,7 +328,7 @@
 											<div class="modal-footer">
 												<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button> 
 												<button type="reset" class="btn btn-default" id="reset">重置</button>
-												<button type="button" class="btn btn-primary" id="advanced_search" data-dismiss="modal">提交</button>
+												<button type="button" class="btn btn-primary" id="advanced_search" data-dismiss="modal" style="background:#0000aa">提交</button>
 											</div>
 										</div>
 									</div>
@@ -318,7 +341,7 @@
 									if (isset($_SESSION['usr'])) {
 										$usr = $_SESSION['usr'];
 								?>
-										<a id="username" href=""><?php echo $usr; ?></a>
+										<a id="username" href="<?php echo $base_url; ?>/user"><?php echo $usr; ?></a>
 									</li>
 									<li>
 										<a id="logout" href="">注销</a>
@@ -346,7 +369,7 @@
 					<div class="span">
 						<ul class="nav nav-list">
 							<li class="nav-header">
-								列表标题
+								<h4>列表标题</h4>
 							</li>
 							<li class="active">
 								<a href="#">首页</a>
@@ -358,7 +381,7 @@
 								<a href="#">应用</a>
 							</li>
 							<li class="nav-header">
-								功能列表
+								<h4>功能列表</h4>
 							</li>
 							<li>
 								<a href="#">资料</a>
@@ -371,7 +394,6 @@
 							<li>
 								<a href="#">帮助</a>
 							</li>
-						</ul>
 					</div>
 				</div>
 				<div class="col-md-10">
@@ -381,7 +403,7 @@
 				</div>
 			</div>
 			
-			<div class="row" id="footer">
+			<div class="row">
 				<div class="col-md-2">
 					<address>
 						 <strong>Twitter, Inc.</strong><br> 795 Folsom Ave, Suite 600<br> San Francisco, CA 94107<br> <abbr title="Phone">P:</abbr> (123) 456-7890

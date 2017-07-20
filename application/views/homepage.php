@@ -33,7 +33,7 @@
 							if (isset($_SESSION['usr'])) {
 								$usr = $_SESSION['usr'];
 						?>
-								<a id="username" href=""><?php echo $usr; ?></a>
+								<a id="username" href="<?php echo $base_url; ?>/user"><?php echo $usr; ?></a>
 							</li>
 							<li>
 								<a id="logout" href="">注销</a>
@@ -41,10 +41,10 @@
 							}
 							else {
 						?>
-								<a href="<?php echo $base_url; ?>\register" id="register">注册</a>
+								<a href="<?php echo $base_url; ?>/register" id="register">注册</a>
 							</li>
 							<li>
-								<a href="<?php echo $base_url; ?>\login" id="login">登录</a>
+								<a href="<?php echo $base_url; ?>/login" id="login">登录</a>
 						<?php
 							}
 						?>
