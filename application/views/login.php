@@ -3,8 +3,11 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<title>登录</title>
-	<link rel="stylesheet" href="<?php echo $base_url;?>/static/css/login.css" type="text/css" />
+	
 	<script src="<?php echo $base_url; ?>/static/js/jquery-3.1.1.min.js"></script>
+	
+	<link rel="stylesheet" href="<?php echo $base_url;?>/static/css/login.css" type="text/css" />
+	
 	<script type="text/javascript">
 	$(document).ready(function () {
 		$('#submit').click(function () {
@@ -79,11 +82,14 @@
 		<form action="">
 			<h1>登录</h1>
 			<span id="msg" style="color:red"></span>
+			<!-- <div>
+				<input type="text" placeholder="邮箱" required="" id="username" />
+			</div> -->
 			<div>
-				<input type="text" placeholder="用户名" id="username" autocomplete="off" />
+				<input type="text" placeholder="请输入用户名或邮箱" id="username" autocomplete="off" />
 			</div>
 			<div>
-				<input type="password" placeholder="密码" id="password" />
+				<input type="password" placeholder="请输入密码" id="password" />
 			</div>
 			<div>
 				<input name="usertype" type="radio" id="manager" value="manager" />管理员

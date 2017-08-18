@@ -2,14 +2,16 @@
 	<head>
     	<meta http-equiv="content-type" content="text/html; charset=utf-8">
     	<title>导师信息网</title>
+		
 		<script src="<?php echo $base_url; ?>/static/js/jquery-3.1.1.min.js"></script>
+		<script src="<?php echo $base_url; ?>/static/js/bootstrap.min.js"></script>
 		
     	<link rel="stylesheet" href="<?php echo $base_url; ?>/static/css/bootstrap.min.css" type="text/css" />
-		<script src="<?php echo $base_url; ?>/static/js/bootstrap.min.js"></script>
+		
 		<script type="text/javascript">
 		$(function() {
 			$.ajax({
-				url:"<?php echo $base_url;?>search_major",
+				url:"<?php echo $base_url;?>/teacher/search_major",
 				type:"POST",
 				dataType:'json',
 				data:{"code":0},
@@ -203,12 +205,11 @@
 					}
 				});
 			})
+			
+			$('#edit').click(function (){
+				$('#input_unit').html("<input type='text' value='asdasd' />");
+			})
 		})
-		
-		function replace_search(data) {
-			var selected = data;
-			document.getElementById("show").text = selected;
-		}
 		
 		function showdirshowdir(i) {
 			var show = document.getElementById("showdir" + i);
@@ -388,7 +389,380 @@
 				
 				<div class="col-md-10">
 					<div class="span">
-					<h1>王陈晨是傻逼</h1>
+						<div class="panel-group">
+							<div class="panel panel-default">
+								<div class="panel-heading">
+									 <a class="panel-title" data-toggle="collapse" href="#user_info">
+										用户信息
+									</a>
+								</div>
+								<div id="user_info" class="panel-collapse collapse in">
+									<div class="panel-body">
+										
+										<div id="user">
+											<style type="text/css">
+												user_table {
+													table-layout: fixed; 
+													word-wrap: break-word; 
+													width: 100%;
+												}
+											</style>
+										
+											<?php 
+												$i = 0;
+												foreach ($teacherList as $item):
+											?>
+											
+											<?php
+											if(isset($item->Teacher_Photo)) {
+											?>
+												<img id='userImg' src='<?php echo $base_url; ?>/static/images/TeacherPhoto/<?php echo $item->Teacher_Photo; ?>' alt='图片加载失败' onerror="this.src='<?php echo $base_url; ?>/static/images/logo.jpg'" />
+											<?php
+											}
+											else {
+											?>
+												<img id='userImg' src='<?php echo $base_url; ?>/static/images/logo.jpg' alt='图片加载失败'>
+											<?php } ?>
+											
+												<style type="text/css">
+												#userImg {
+													width: 60px;
+													display: block;
+													margin: 0 auto;
+													margin-bottom: 30px;
+													margin-top: 20px;
+													border-radius: 20px;
+												}
+												
+												#collectionImg<?php echo $item->Teacher_ID; ?> 
+												{
+													width: 20px;
+													margin-right: 5px;
+													margin-bottom: 5px;
+													filter: alpha(opacity=50);
+													opacity: 0.9;
+												}
+												</style>
+												
+												<ul style="list-style-type:none;" class="list-inline">
+													<li>
+														<h3>&nbsp;<?php echo $item->Teacher_Name; ?></h3>
+													</li>
+													<li>
+														<input type="button" id="edit" value="编辑" onclick="edit()" />
+														<!-- <a href="" id="edit">编辑</a> -->
+													</li>
+												</ul>
+												
+												<ul style="list-style-type:none;" class="list-inline">
+													<?php
+													if(isset($item->Teacher_Unit)) {
+													?>
+														<li style='color:#737373'>单&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;位：</li>
+														<li id="input_unit"><?php echo $item->Teacher_Unit; ?></li>
+													<?php
+													}
+													?>
+												</ul>
+												
+												<ul style="list-style-type:none;" class="list-inline">
+													<?php
+													if(isset($item->Teacher_Duty) && $item->Teacher_Duty != "无") {
+													?>
+														<li style='color:#737373'>职&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;务：</li>
+														<li><?php echo $item->Teacher_Duty; ?></li>
+													<?php } ?>
+												</ul>
+												
+												<ul style="list-style-type:none;" class="list-inline">
+													<?php
+													if(isset($item->Teacher_ProTitle)) {
+													?>
+														<li style='color:#737373'>职&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;称：</li>
+														<li><?php echo $item->Teacher_ProTitle; ?>
+													<?php
+														if($item->Teacher_MT == 1 && $item->Teacher_DT == 1) {
+													?>
+															/博士生导师</li>
+													<?php 
+														}
+														elseif($item->Teacher_MT == 1 && $item->Teacher_DT == 0) {
+													?>
+															/硕士生导师</li>
+													<?php
+														}
+														else {
+													?>
+															</li>
+													<?php
+														}
+													}
+													?>
+												</ul>
+												
+												<ul style="list-style-type:none;" class="list-inline">
+													<?php
+													if(isset($item->Teacher_Title)) {
+													?>
+														<li style='color:#737373'>头&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;衔：</li>
+														<li><?php echo $item->Teacher_Title; ?></li>
+													<?php } ?>
+												</ul>
+												
+												<ul style="list-style-type:none;" class="list-inline">
+													<?php
+													if(isset($item->Major_Name)) {
+														if(isset($item->Major2)){
+													?>
+															<li style='color:#737373'>专&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;业：</li>
+															<li>一级学科：<?php echo $item->Major1; ?></li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+															<li>二级学科：<?php echo $item->Major2; ?></li>
+														<?php
+														}
+														else{
+														?>
+															<li style='color:#737373'>专&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;业：</li>
+															<li>一级学科：<?php echo $item->Major1; ?></li>
+													<?php
+														}
+													}
+													?>
+												</ul>
+												
+												<ul style="list-style-type:none;" class="list-inline">
+													<?php
+													if(isset($item->Teacher_HomePage)) {
+													?>
+														<li style='color:#737373'>主&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;页：</li>
+														<li><a href=<?php echo $item->Teacher_HomePage; ?> target="_blank">个人主页</a></li>
+													<?php } ?>
+												</ul>
+												
+												<ul style="list-style-type:none;" class="list-inline">
+													<?php
+													if(isset($item->Teacher_Dir)) {
+													?>
+														<li style='color:#737373'>方&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;向：</li>
+														<li><?php echo $item->Teacher_Dir; ?></li>
+													<?php 
+													}
+													?>
+												</ul>
+												
+												<ul style="list-style-type:none;" class="list-inline">
+													<?php
+													if(isset($item->Teacher_Tel)) {
+													?>
+														<li style='color:#737373'>联系方式：</li>
+														<li><?php echo $item->Teacher_Tel; ?></li>
+													<?php } ?>
+												</ul>
+												
+											</tr>
+											<?php endforeach; ?>
+										</div>
+										
+									</div>
+								</div>
+							</div>
+							
+							<div class="panel panel-default">
+								<div class="panel-heading">
+									 <a class="panel-title collapsed" data-toggle="collapse" data-parent="#panel-736360" href="#teacher_info">
+										导师信息
+									 </a>
+								</div>
+								<div id="teacher_info" class="panel-collapse collapse">
+									<div class="panel-body">
+										
+										<div id="table">
+											<table class="table table-striped table-bordered">
+												<style type="text/css">
+													table {
+														table-layout: fixed; 
+														word-wrap: break-word; 
+														width: 100%;
+													}
+												</style>
+											
+												<?php 
+													$i = 0;
+													foreach ($teacherList as $item):
+												?>
+												<tr>
+													<td style="text-align:center">
+													<?php
+													if(isset($item->Teacher_Photo)) {
+													?>
+														<img id='teacherImg' src='<?php echo $base_url; ?>/static/images/TeacherPhoto/<?php echo $item->Teacher_Photo; ?>' alt='图片加载失败' onerror="this.src='<?php echo $base_url; ?>/static/images/logo.jpg'" />
+													<?php
+													}
+													else {
+													?>
+														<img id='teacherImg' src='<?php echo $base_url; ?>/static/images/logo.jpg' alt='图片加载失败'>
+													<?php } ?>
+													
+														<style type="text/css">
+														#teacherImg {
+															width: 60%;
+															display: block;
+															margin: 0 auto;
+															margin-bottom: 30px;
+															margin-top: 20px;
+															border-radius: 20px;
+														}
+														
+														#collectionImg<?php echo $item->Teacher_ID; ?> 
+														{
+															width: 20px;
+															margin-right: 5px;
+															margin-bottom: 5px;
+															filter: alpha(opacity=50);
+															opacity: 0.9;
+														}
+														</style>
+														
+													</td>
+													
+													<td style="width:80%">
+														<ul style="list-style-type:none;" class="list-inline">
+															<li>
+																<h3>&nbsp;<?php echo $item->Teacher_Name; ?></h3>
+															</li>
+															<li>
+																<input type="button" id="edit" value="编辑" onclick="edit()" />
+																<!-- <a href="" id="edit">编辑</a> -->
+															</li>
+														</ul>
+														
+														<ul style="list-style-type:none;" class="list-inline">
+															<?php
+															if(isset($item->Teacher_Unit)) {
+															?>
+																<li style='color:#737373'>单&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;位：</li>
+																<li id="input_unit"><?php echo $item->Teacher_Unit; ?></li>
+															<?php
+															}
+															?>
+														</ul>
+														
+														<ul style="list-style-type:none;" class="list-inline">
+															<?php
+															if(isset($item->Teacher_Duty) && $item->Teacher_Duty != "无") {
+															?>
+																<li style='color:#737373'>职&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;务：</li>
+																<li><?php echo $item->Teacher_Duty; ?></li>
+															<?php } ?>
+														</ul>
+														
+														<ul style="list-style-type:none;" class="list-inline">
+															<?php
+															if(isset($item->Teacher_ProTitle)) {
+															?>
+																<li style='color:#737373'>职&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;称：</li>
+																<li><?php echo $item->Teacher_ProTitle; ?>
+															<?php
+																if($item->Teacher_MT == 1 && $item->Teacher_DT == 1) {
+															?>
+																	/博士生导师</li>
+															<?php 
+																}
+																elseif($item->Teacher_MT == 1 && $item->Teacher_DT == 0) {
+															?>
+																	/硕士生导师</li>
+															<?php
+																}
+																else {
+															?>
+																	</li>
+															<?php
+																}
+															}
+															?>
+														</ul>
+														
+														<ul style="list-style-type:none;" class="list-inline">
+															<?php
+															if(isset($item->Teacher_Title)) {
+															?>
+																<li style='color:#737373'>头&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;衔：</li>
+																<li><?php echo $item->Teacher_Title; ?></li>
+															<?php } ?>
+														</ul>
+														
+														<ul style="list-style-type:none;" class="list-inline">
+															<?php
+															if(isset($item->Major_Name)) {
+																if(isset($item->Major2)){
+															?>
+																	<li style='color:#737373'>专&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;业：</li>
+																	<li>一级学科：<?php echo $item->Major1; ?></li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+																	<li>二级学科：<?php echo $item->Major2; ?></li>
+																<?php
+																}
+																else{
+																?>
+																	<li style='color:#737373'>专&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;业：</li>
+																	<li>一级学科：<?php echo $item->Major1; ?></li>
+															<?php
+																}
+															}
+															?>
+														</ul>
+														
+														<ul style="list-style-type:none;" class="list-inline">
+															<?php
+															if(isset($item->Teacher_HomePage)) {
+															?>
+																<li style='color:#737373'>主&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;页：</li>
+																<li><a href=<?php echo $item->Teacher_HomePage; ?> target="_blank">个人主页</a></li>
+															<?php } ?>
+														</ul>
+														
+														<ul style="list-style-type:none;" class="list-inline">
+															<?php
+															if(isset($item->Teacher_Dir)) {
+																if (mb_strlen($item->Teacher_Dir) >= 10) {
+																	$show = mb_substr($item->Teacher_Dir, 0, 10, 'utf-8');
+															?>
+																	<li style='color:#737373'>方&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;向：</li>
+																	<li id='showdir<?php echo $i; ?>'><?php echo $show; ?></li>
+																	<li id='unfold<?php echo $i; ?>' onclick='showdir(<?php echo $i; ?>)'><a>展开>></a></li>
+																	<li id='hiddendir<?php echo $i; ?>' style='display:none'><?php echo $item->Teacher_Dir; ?></li>
+																	<li id='fold<?php echo $i; ?>' onclick='hidedir(<?php echo $i; ?>)' style='display:none'><a>收起<<</a></li>
+															<?php
+																}
+																else {
+															?>
+																	<li style='color:#737373'>方&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;向：</li>
+																	<li id='dirLi<?php echo $i; ?>'><?php echo $item->Teacher_Dir; ?></li>
+															<?php 
+																}
+															}
+															$i ++;
+															?>
+														</ul>
+														
+														<ul style="list-style-type:none;" class="list-inline">
+															<?php
+															if(isset($item->Teacher_Tel)) {
+															?>
+																<li style='color:#737373'>联系方式：</li>
+																<li><?php echo $item->Teacher_Tel; ?></li>
+															<?php } ?>
+														</ul>
+													</td>
+													
+												</tr>
+												<?php endforeach; ?>
+											
+											</table>
+										</div>
+										
+									</div>
+								</div>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>

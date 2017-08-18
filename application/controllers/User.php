@@ -7,14 +7,40 @@ class User extends CI_Controller {
 	{
 		parent::__construct();
 		$this->base_url = $this->config->item('site_url');
-		session_start();
 		$this->load->model('Model');
+		session_start();
 	}
 	
 	public function index()
 	{
 		if (isset($_SESSION['usr'])) {
-			$this->load->view('information', array('base_url' => $this->base_url));
+			$sql_search = "SELECT * FROM (Teacher as a left join Major as b on a.Teacher_Major=b.Major_Code) inner join User as c on a.Teacher_Name=c.User_RealName";
+			$teacherList = $this->Model->search_db($sql_search);
+			
+			$sql_searchmajor = "SELECT * FROM Major";
+			$major_result = $this->Model->search_db($sql_searchmajor);
+			$count = count($major_result);
+			
+			foreach ($teacherList as $item):
+				$major = $item->Major_Code;
+				if(strlen($major) >= 5){
+					$item->Major2 = $item->Major_Name;					//二级学科
+					
+					$i = 0;
+					for ($i; $i <= $count; $i ++) {
+						if (isset($major_result[$i]->Major_Code) && isset($item->Major_RelatedID) && ($major_result[$i]->Major_Code == $item->Major_RelatedID)) {
+							$item->Major1 = $major_result[$i]->Major_Name;
+						}
+					}
+				}
+				
+				else {													//一级学科
+					$item->Major1 = $item->Major_Name;
+				}
+				
+			endforeach;
+			
+			$this->load->view('information', array('base_url' => $this->base_url, 'teacherList' => $teacherList));
 		}
 		else {
 			$this->load->view('login', array('base_url' => $this->base_url));
@@ -23,7 +49,33 @@ class User extends CI_Controller {
 	
 	public function information()
 	{
-		$this->load->view('information', array('base_url' => $this->base_url));
+		$sql_search = "SELECT * FROM (Teacher as a left join Major as b on a.Teacher_Major=b.Major_Code) inner join User as c on a.Teacher_Name=c.User_RealName";
+		$teacherList = $this->Model->search_db($sql_search);
+		
+		$sql_searchmajor = "SELECT * FROM Major";
+		$major_result = $this->Model->search_db($sql_searchmajor);
+		$count = count($major_result);
+		
+		foreach ($teacherList as $item):
+			$major = $item->Major_Code;
+			if(strlen($major) >= 5){
+				$item->Major2 = $item->Major_Name;					//二级学科
+				
+				$i = 0;
+				for ($i; $i <= $count; $i ++) {
+					if (isset($major_result[$i]->Major_Code) && isset($item->Major_RelatedID) && ($major_result[$i]->Major_Code == $item->Major_RelatedID)) {
+						$item->Major1 = $major_result[$i]->Major_Name;
+					}
+				}
+			}
+			
+			else {													//一级学科
+				$item->Major1 = $item->Major_Name;
+			}
+			
+		endforeach;
+		
+		$this->load->view('information', array('base_url' => $this->base_url, 'teacherList' => $teacherList));
 	}
 	
 	public function collect() {
@@ -59,7 +111,7 @@ class User extends CI_Controller {
 	{
 		$sql = "SELECT * FROM (Teacher as a left join Major as b on a.Teacher_Major=b.Major_Code) inner join Collection as c on a.Teacher_ID=c.C_Teacher_ID WHERE C_User_ID=".$_SESSION['id']." AND Collected=1";
 		$resultCount = $this->Model->search_num($sql);
-
+		
 		if($resultCount > 0) {
 			$pageSize = 10;
 			$pageNow = $_GET['page'];
@@ -95,7 +147,7 @@ class User extends CI_Controller {
 					$item->Major1 = $item->Major_Name;
 				}
 				
-				endforeach;
+			endforeach;
 			
 			$this->load->view('collection', array('base_url' => $this->base_url, 'teacherList' => $teacherList, 'pageCount' => $pageCount, 'pageNow' => $pageNow));
 		}

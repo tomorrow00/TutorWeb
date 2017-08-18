@@ -70,7 +70,7 @@ class Teacher extends CI_Controller{
 					$item->Major1 = $item->Major_Name;
 				}
 				
-				endforeach;
+			endforeach;
 			
 			$this->load->view('teacher', array('base_url' => $this->base_url, 'teacherList' => $teacherList, 'pageCount' => $pageCount, 'pageNow' => $pageNow));
 		}

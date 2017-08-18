@@ -456,6 +456,7 @@
 											margin: 0 auto;
 											margin-bottom: 30px;
 											margin-top: 20px;
+											border-radius: 20px;
 										}
 										
 										#collectionImg<?php echo $item->Teacher_ID; ?> 
@@ -467,6 +468,7 @@
 											opacity: 0.9;
 										}
 										</style>
+									
 									<?php
 										if (isset($item->C_User_ID) && $item->Collected == 1) {
 									?>
@@ -491,13 +493,13 @@
 											<?php
 											if(isset($item->Teacher_Unit)) {
 											?>
-												<li style='color:#737373'>单&nbsp;&nbsp;&nbsp;位：</li>
+												<li style='color:#737373'>单&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;位：</li>
 												<li><?php echo $item->Teacher_Unit; ?></li>
 											<?php
 											}
-											if(isset($item->Teacher_Duty)) {
+											if(isset($item->Teacher_Duty) && $item->Teacher_Duty != "无") {
 											?>
-												<li style='color:#737373'>职&nbsp;&nbsp;&nbsp;务：</li>
+												<li style='color:#737373'>职&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;务：</li>
 												<li><?php echo $item->Teacher_Duty; ?></li>
 											<?php } ?>
 										</ul>
@@ -506,16 +508,33 @@
 											<?php
 											if(isset($item->Teacher_ProTitle)) {
 											?>
-												<li style='color:#737373'>职&nbsp;&nbsp;&nbsp;称：</li>
-												<li><?php echo $item->Teacher_ProTitle; ?></li>
-											<?php } ?>
+												<li style='color:#737373'>职&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;称：</li>
+												<li><?php echo $item->Teacher_ProTitle; ?>
+											<?php
+												if($item->Teacher_MT == 1 && $item->Teacher_DT == 1) {
+											?>
+													/博士生导师</li>
+											<?php 
+												}
+												elseif($item->Teacher_MT == 1 && $item->Teacher_DT == 0) {
+											?>
+													/硕士生导师</li>
+											<?php
+												}
+												else {
+											?>
+													</li>
+											<?php
+												}
+											}
+											?>
 										</ul>
 										
 										<ul style="list-style-type:none;" class="list-inline">
 											<?php
 											if(isset($item->Teacher_Title)) {
 											?>
-												<li style='color:#737373'>头&nbsp;&nbsp;&nbsp;衔：</li>
+												<li style='color:#737373'>头&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;衔：</li>
 												<li><?php echo $item->Teacher_Title; ?></li>
 											<?php } ?>
 										</ul>
@@ -525,14 +544,14 @@
 											if(isset($item->Major_Name)) {
 												if(isset($item->Major2)){
 											?>
-													<li style='color:#737373'>专&nbsp;&nbsp;&nbsp;业：</li>
+													<li style='color:#737373'>专&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;业：</li>
 													<li>一级学科：<?php echo $item->Major1; ?></li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 													<li>二级学科：<?php echo $item->Major2; ?></li>
 												<?php
 												}
 												else{
 												?>
-													<li style='color:#737373'>专&nbsp;&nbsp;&nbsp;业：</li>
+													<li style='color:#737373'>专&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;业：</li>
 													<li>一级学科：<?php echo $item->Major1; ?></li>
 											<?php
 												}
@@ -544,7 +563,7 @@
 											<?php
 											if(isset($item->Teacher_HomePage)) {
 											?>
-												<li style='color:#737373'>主&nbsp;&nbsp;&nbsp;页：</li>
+												<li style='color:#737373'>主&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;页：</li>
 												<li><a href=<?php echo $item->Teacher_HomePage; ?> target="_blank">个人主页</a></li>
 											<?php } ?>
 										</ul>
@@ -555,7 +574,7 @@
 												if (mb_strlen($item->Teacher_Dir) >= 10) {
 													$show = mb_substr($item->Teacher_Dir, 0, 10, 'utf-8');
 											?>
-													<li style='color:#737373'>方&nbsp;&nbsp;&nbsp;向：</li>
+													<li style='color:#737373'>方&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;向：</li>
 													<li id='showdir<?php echo $i; ?>'><?php echo $show; ?></li>
 													<li id='unfold<?php echo $i; ?>' onclick='showdir(<?php echo $i; ?>)'><a>展开>></a></li>
 													<li id='hiddendir<?php echo $i; ?>' style='display:none'><?php echo $item->Teacher_Dir; ?></li>
@@ -564,13 +583,22 @@
 												}
 												else {
 											?>
-													<li style='color:#737373'>方&nbsp;&nbsp;&nbsp;向：</li>
+													<li style='color:#737373'>方&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;向：</li>
 													<li id='dirLi<?php echo $i; ?>'><?php echo $item->Teacher_Dir; ?></li>
 											<?php 
 												}
 											}
 											$i ++;
 											?>
+										</ul>
+										
+										<ul style="list-style-type:none;" class="list-inline">
+											<?php
+											if(isset($item->Teacher_Tel)) {
+											?>
+												<li style='color:#737373'>联系方式：</li>
+												<li><?php echo $item->Teacher_Tel; ?></li>
+											<?php } ?>
 										</ul>
 									</td>
 									
